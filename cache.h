@@ -1,16 +1,11 @@
 /*
- * @file list.h
+ * @file config.h
  * @author charlies
+ * @mail: xuguo.wong@gmail.com
  * @date 2018/08/13
  *
  *
- * Here is a recipe to cook list.h for user space program.
- * 1. copy list.h from linux/include/list.h
- * 2. remove
- *     - #ifdef __KERNE__ and its #endif
- *     - all #include line
- *     - prefetch() and rcu related functions
- * 3. add macro offsetof() and container_of
+ * Here is a cache simulator configuration header.
  */
 
 #ifndef __CONFIG_H__
@@ -19,6 +14,7 @@
 #include <list.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 // The current cpu architecture has 2 type of cache type:
 // 		1 ICache, store the instructions
@@ -96,6 +92,26 @@ typedef enum cache_conservative_policy {
     CP_mru,
 } cache_convervative_policy_t;
 
+/*
+ * cache_hit_miss_category
+ */
+typedef enum cache_H_M_category {
+    unknown = 0,
+    CHMC_hit = 1,
+    CHMC_miss
+} cache_H_M_category_t;
+
+typedef struct cache_line {
+#ifdef __x86_64__
+    unsigned long long valid:1;
+    unsigned long long tag:63;
+#else
+    unsigned long valid:1;
+    unsigned long tag:31;
+#endif
+    char *l_data[];
+} cache_line_t __attribute__ ((packed));
+
 typedef struct cache {
     struct list_head list;
     cache_type_t t_cache;
@@ -104,13 +120,8 @@ typedef struct cache {
     cache_conservative_policy cp_cache;
     cache_set_associative_t	sa_cache;
     cache_set_ways_t sw_cache;
-    char data[];
+    cache_line_t *data[];
 } cache_t;
 
-typedef struct cache_operations {
-    void invalid(int level, cache_t *cache);
-    void init(int level, cache_t *cache);
-    void replace(int level, cache_t *cache);
-} cache_ops_t;
 
 #endif /* __CONFIG_H__ */
