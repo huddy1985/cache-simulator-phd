@@ -73,12 +73,12 @@ typedef enum cache_set_ways {
 
 // Please read this site:
 // https://en.wikipedia.org/wiki/Cache_inclusion_policy
-typedef enum cache_hierachy_policy {
+typedef enum cache_hierarchy_policy {
     H_unknown = 0,
     H_inclusive = 1,
     H_exclusive = 2,
     H_non_exclusive = 3,
-} cache_hierachy_policy_t;
+} cache_hierarchy_policy_t;
 
 // please read this site:
 // https://en.wikipedia.org/wiki/Cache_replacement_policies
@@ -116,7 +116,7 @@ typedef struct cache {
     struct list_head list;
     cache_type_t t_cache;
     cache_level_t l_cache;
-    cache_hierachy_policy_t hp_cache;
+    cache_hierarchy_policy_t hp_cache;
     cache_conservative_policy_t cp_cache;
     cache_set_associative_t sa_cache;
     cache_set_ways_t sw_cache;
