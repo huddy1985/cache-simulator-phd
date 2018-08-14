@@ -17,6 +17,7 @@
 
 #ifndef __LIST_H__
 #define __LIST_H__ (1)
+#include <stddef.h>
 
 // import from include/linux/types.h
 struct list_head {
