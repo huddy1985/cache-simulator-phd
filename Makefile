@@ -22,6 +22,7 @@ $(target):
 	mkdir $(tmp)
 	@echo $(type)
 	$(MAKE) -C $(file)
+	$(MAKE) -C cfg-parser
 
 .PHONY: clean
 

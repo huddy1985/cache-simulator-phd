@@ -1,14 +1,14 @@
-include ../../inc.mk
+include ../inc.mk
 
 unexport CFLAGS
 unexport objs
 
-CFLAGS = -I../../$(INCLUDE) -Werror -Wall
+CFLAGS = -I../$(INCLUDE) -Werror -Wall
 srcs = $(wildcard *.c)
 objs = $(patsubst %.c,%.o, $(srcs))
 
 all: $(objs)
-	mv $(objs) ../../objs
+	mv $(objs) ../objs
 
 $(objs): %.o : %.c
 	$(CC) -c $< -o $@ $(CFLAGS)
