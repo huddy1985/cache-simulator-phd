@@ -1,9 +1,14 @@
 include $(CURDIR)/inc.mk
 
 target = cache-simulator
-objs = $(wildcard objs/*.o)
-objs += main.o
+cache_objs = $(wildcard objs/*.o)
+srcs = main.c
+objs = main.o
 tmp = ./objs
+
+unexport CFLAGS
+CFLAGS := -I./include
+cc = gcc
 
 # compile inclusive cache hierachy
 ifeq ($(type),INC)
@@ -16,15 +21,19 @@ else
 file = NINE
 endif
 
-$(target):
+$(target): $(objs)
 	@echo $(OBJSDIR)
 	rm -rf $(tmp)
 	mkdir $(tmp)
 	@echo $(type)
 	$(MAKE) -C $(file)
 	$(MAKE) -C cfg-parser
+	$(cc) $(cache_objs) $(objs) -o $@
+
+$(objs):
+	$(CC) -c $(srcs) -o $@ $(CFLAGS)
 
 .PHONY: clean
 
 clean:
-	rm -rf $(objs)
+	rm -rf $(objs) $(cache_objs) $(target)
