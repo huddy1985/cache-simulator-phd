@@ -19,8 +19,8 @@
 #include "cache_ops.h"
 
 // The current cpu architecture has 2 type of cache type:
-// 		1 ICache, store the instructions
-// 		2 DCache, store the data
+//		1 ICache, store the instructions
+//		2 DCache, store the data
 typedef enum cache_type {
     ICache = 0,
     DCache,
@@ -39,7 +39,7 @@ typedef enum cache_level {
 } cache_level_t;
 
 typedef enum cache_lv_size {
-    unknown = 0, 	// not a standard capacity
+    lv_unknown = 0,	// not a standard capacity
     S_16KB = 1,
     S_32KB = 2,
     S_64KB = 3,
@@ -105,14 +105,18 @@ typedef enum cache_H_M_category {
 
 typedef struct __attribute__ ((__packed__)) cache_line {
 #ifdef __x86_64__
-    unsigned long long valid:1;
-    unsigned long long tag:63;
+	unsigned long long valid: 1;
+	unsigned long long tag: 63;
 #else
-    unsigned long valid:1;
-    unsigned long tag:31;
+	unsigned long valid: 1;
+	unsigned long tag: 31;
 #endif
-    char *l_data[];
-} cache_line_t ;
+	char *l_data;
+} cache_line_t;
+
+typedef struct __attribute__ ((__packed__)) cache_set {
+	cache_line_t *s_data;
+} cache_set_t ;
 
 typedef struct cache {
     struct list_head list;
@@ -125,7 +129,7 @@ typedef struct cache {
     void *ops;
     unsigned long long statistical_hit;
     unsigned long long statistical_miss;
-    cache_line_t data[];
+    cache_set_t *c_data[];
 } cache_t;
 
 

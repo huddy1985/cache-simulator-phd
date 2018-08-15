@@ -3,11 +3,14 @@
 type=0
 ## define the cache level
 level=3 
+## define every cache line's size, e.g. 64B, current only support
+## same size of linesize
+linesize = 64
 ## define every cache level's size, 32K, 64K, 2M
 lvsize=1,5,8
 ## define every cache line's size, 16B, 32B
 ## define cache set associative
-sw=2
+sw=2,4,8
 ## This value could derived from cache size and ways
 # sa = 
 ## define every cache level's hierarchy

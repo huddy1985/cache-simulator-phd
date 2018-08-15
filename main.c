@@ -13,6 +13,7 @@ cache_t g_cache;
 /* for read the data from config file */
 int cfg_type;
 int cfg_level;
+int cfg_linesize;
 char *cfg_lvsize;
 char *cfg_sw;
 char *cfg_hierarchy;
@@ -46,6 +47,7 @@ static int load_cfg()
     struct cfg_line cfg[] = {
         {"type", &cfg_type, TYPE_INT, PARM_MAND, 0, 1},
         {"level", &cfg_level, TYPE_INT, PARM_MAND, 0, 3},
+		{"linesize", &cfg_linesize, TYPE_INT, PARM_MAND, 0, 64},
         {"lvsize", &cfg_lvsize, TYPE_STRING, PARM_MAND, 0, 0},
         {"sw", &cfg_sw, TYPE_STRING, PARM_MAND, 0, 0},
         {"hierarchy", &cfg_hierarchy, TYPE_STRING, PARM_MAND, 0, 0},
@@ -58,31 +60,104 @@ static int load_cfg()
     printf("\n\tuser settinngs:" \
            "\n\t\t1. type: %d" \
            "\n\t\t2. level: %d" \
-           "\n\t\t3. lvsize: %s" \
-           "\n\t\t4. sw: %s" \
-           "\n\t\t5. hierarchy: %s" \
-           "\n\t\t6. policy: %s",
-           cfg_type, cfg_level, cfg_lvsize,
+		   "\n\t\t3. linesize: %d" \
+           "\n\t\t4. lvsize: %s" \
+           "\n\t\t5. sw: %s" \
+           "\n\t\t6. hierarchy: %s" \
+           "\n\t\t7. policy: %s",
+           cfg_type, cfg_level, cfg_linesize, cfg_lvsize,
            cfg_sw, cfg_hierarchy, cfg_policy);
 }
 
+int *get_cache_lvsize()
+{
+	int *lvsize = malloc(sizeof(int)*cfg_level);
+	char *str_lvsize = cfg_lvsize;
+	char *delim = ",", *token = NULL;
+	int index = 0;
+
+	token = strtok(str_lvsize, delim);
+	while (token) {
+		lvsize[index++]	 = atoi(token);
+		token = strtok(NULL, delim);
+	}
+
+	return lvsize;
+}
+
+#define CACHE_LV_2_SIZE_K(index) ({int k = 1024; int size = 0;			\
+						switch(index)									\
+							{											\
+								case 1: size = 16*k;	 break;			\
+								case 2: size = 32*k;	break;			\
+								case 3: size = 64*k;	break;			\
+								case 4: size = 128*k;	break;			\
+								case 5: size = k*k;		break;			\
+								case 6: size = 2*k*k;	break;			\
+								case 7: size = 4*k*k;	break;			\
+								case 8: size = 8*k*k;	break;			\
+								case 9: size = 16*k*k;	break;			\
+								default: size = 64*k;	break;			\
+							}											\
+						size;											\
+					})
+
+int *get_cache_sways()
+{
+	int *sw = malloc(sizeof(int)*cfg_level);
+	char *str_sw = cfg_sw;
+	char *delim = ",", *token = NULL;
+	int index = 0;
+
+	token = strtok(str_sw, delim);
+	while (token) {
+		sw[index++]	 = atoi(token);
+		token = strtok(NULL, delim);
+	}
+
+	return sw;
+}
+
+#define SET_WAYS_2_SETS(size, linesize, ways) ((size)/(linesize)/(ways))
+
+
 int main()
 {
-    int cache_line = 0;
-    int set_associative = 0;
+    int cache_line = 0, linesize;
+    int set_associatives = 0;
+	int *lvsize = NULL;
+	int *sw = NULL;
+	int size = 0;
+	int ways = 0;
 
     printf("<usage - first> sets the config files in conf/cfg.cache \n");
     INIT_LIST_HEAD(&g_caches);
     load_cfg();
+	
+	lvsize = get_cache_lvsize();
+	sw = get_cache_sways();
 
+	if (!lvsize || !sw) {
+		puts("please adjust cfg.cache file about cache parameters");
+		return -1;
+	}
 
+	linesize = cfg_linesize;
 
     for (int i = 0; i < cfg_level; ++i) {
-        cache_t *cache = malloc(sizeof(cache_t) + cache_line);
+		printf("\nlvsize is %d", lvsize[i]);
+		size = CACHE_LV_2_SIZE_K(lvsize[i]);
+		printf("\ncache size is %d", size);
+		ways = sw[i];
+		set_associatives = SET_WAYS_2_SETS(size, linesize, ways);
+        cache_t *cache = malloc(sizeof(cache_t) + sizeof(cache_set_t*)*set_associatives);
+
         if (!cache) {
             puts("\n---out of memory---\n");
             return -1;
         }
+
+
         printf("\n---create level %d---\n", i + 1);
         INIT_LIST_HEAD(&cache->list);
         list_add(&g_caches, &cache->list);
@@ -90,11 +165,14 @@ int main()
         cache->l_cache = i;
         cache->hp_cache = H_inclusive;
         cache->cp_cache = CP_lru;
-        // cache->sa_cache = SA_set_4;
         cache->sw_cache = SW_4ways;
         cache->ops = &cache_inclusive;
         cache->statistical_hit = 0;
         cache->statistical_miss = 0;
+
+		for (int j = 0; j < set_associatives; ++j) {
+			cache->c_data[j] = (cache_set_t*)malloc(sizeof(cache_line_t)*ways);
+		}
     }
     puts("init cache done");
     return 0;
