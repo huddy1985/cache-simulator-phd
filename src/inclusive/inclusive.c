@@ -20,7 +20,7 @@ void inclusive (cache_level_t, long, const char *, size_t);
 cache_operations_t cache_inclusive = {
     .init = inclusive_init,
     .load = inclusive_load,
-   .writeback = inclusive_writeback,
+    .writeback = inclusive_writeback,
     .invalid = inclusive_invalid,
     .inclusive = inclusive,
 };

@@ -452,8 +452,8 @@ unknown_parameter:
     goto error;
 
 missing_mandatory:
-    LOG_ERR("missing mandatory parameter [%s] in config file [%s]",
-            cfg[i].parameter, cfg_file);
+    // LOG_ERR("missing mandatory parameter [%s] in config file [%s]",
+    //         cfg[i].parameter, cfg_file);
 error:
     return FAIL;
 }

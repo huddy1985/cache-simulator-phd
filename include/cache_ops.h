@@ -11,8 +11,11 @@
 #define __CACHE_OPS_H__
 #include "cache.h"
 
+typedef enum cache_level cache_level_t;
+typedef enum cache_H_M_category cache_H_M_category_t;
+
 typedef struct cache_operations {
-    int (*init) (cache_level_t, size_t size);
+    int (*init) (cache_level_t level, size_t size);
     cache_H_M_category_t (*load) (long address, const char *data, size_t size);
     cache_H_M_category_t (*writeback) (long address, const char *data, size_t size);
     void (*invalid) (cache_level_t level, long address);

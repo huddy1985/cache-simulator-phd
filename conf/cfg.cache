@@ -1,17 +1,17 @@
 ## define cache type
 ## ICache or DCache
-type = 0
+type=0
 ## define the cache level
-level = 3 
+level=3 
 ## define every cache level's size, 32K, 64K, 2M
-lvsize = 1,5,8
+lvsize=1,5,8
 ## define every cache line's size, 16B, 32B
 ## define cache set associative
-sw = 2
+sw=2
 ## This value could derived from cache size and ways
-sa = 
+# sa = 
 ## define every cache level's hierarchy
 ## INCLUSIVE, NON-INCLUSIVE, EXCLUSIVE
-hierarchy = 0,1,2
+hierarchy=0,1,2
 ## define every cache level's conservative policy
-policy = 1,2,2
+policy=1,2,2

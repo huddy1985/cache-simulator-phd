@@ -1,39 +1,30 @@
 include $(CURDIR)/inc.mk
 
 target = cache-simulator
-cache_objs = $(wildcard objs/*.o)
+inclusive_obj = $(patsubst %.c,%.o, $(wildcard $(INCLUSIVE_SRC_DIR)/*.c))
+cfg_obj = $(patsubst %.c,%.o, $(wildcard $(CFG_PARSER)/*.c))
 srcs = main.c
 objs = main.o
-tmp = ./objs
 
 unexport CFLAGS
-CFLAGS := -I./include
-cc = gcc
+CFLAGS := -I./include -std=c99
 
-# compile inclusive cache hierachy
-ifeq ($(type),INC)
-file := src/inclusive/
-# compile exclusive cache hierachy
-else ifdef ($(type),EXC)
-file = exclusive
-# compile non-inclusive-non-exclusive cache hierachy
-else
-file = NINE
-endif
+test: $(target)
+	./$(target)
 
-$(target): $(objs)
-	@echo $(OBJSDIR)
-	rm -rf $(tmp)
-	mkdir $(tmp)
-	@echo $(type)
-	$(MAKE) -C $(file)
-	$(MAKE) -C cfg-parser
-	$(cc) $(cache_objs) $(objs) -o $@
+$(target): $(inclusive_obj) $(cfg_obj) $(objs) 
+	$(CC) $(inclusive_obj) $(cfg_obj) $(objs) -o $@
 
 $(objs):
 	$(CC) -c $(srcs) -o $@ $(CFLAGS)
 
+$(inclusive_obj):
+	$(MAKE) -C $(INCLUSIVE_SRC_DIR)
+
+$(cfg_obj):
+	$(MAKE) -C $(CFG_PARSER)
+
 .PHONY: clean
 
 clean:
-	rm -rf $(objs) $(cache_objs) $(target)
+	rm -rf $(objs) $(inclusive_obj) $(cfg_obj) $(target) $(tmp)

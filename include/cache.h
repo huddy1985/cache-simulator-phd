@@ -8,13 +8,15 @@
  * Here is a cache simulator configuration header.
  */
 
-#ifndef __CONFIG_H__
-#define __CONFIG_H__
+#ifndef __CACHE_H__
+#define __CACHE_H__
 
 #include <list.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+
+#include "cache_ops.h"
 
 // The current cpu architecture has 2 type of cache type:
 // 		1 ICache, store the instructions
@@ -120,8 +122,11 @@ typedef struct cache {
     cache_conservative_policy_t cp_cache;
     cache_set_associative_t sa_cache;
     cache_set_ways_t sw_cache;
-    cache_line_t *data[];
+    void *ops;
+    unsigned long long statistical_hit;
+    unsigned long long statistical_miss;
+    cache_line_t data[];
 } cache_t;
 
 
-#endif /* __CONFIG_H__ */
+#endif /* __CACHE_H__ */

@@ -8,7 +8,6 @@ srcs = $(wildcard *.c)
 objs = $(patsubst %.c,%.o, $(srcs))
 
 all: $(objs)
-	mv $(objs) ../objs
 
 $(objs): %.o : %.c
 	$(CC) -c $< -o $@ $(CFLAGS)
