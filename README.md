@@ -7,3 +7,6 @@ Includes sets, ways, levels, sizes and so on.
 ### Day1. create a basic structure of cache.
 
 ### Day2. init the cache operations and makefile.
+
+### Day3. the next is add a process to create the cfg of binary file.
+
