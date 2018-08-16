@@ -3,6 +3,8 @@
  * @author charlies
  * @date 2018/08/13
  *
+ *authority: GPL v2.0
+ *
  * port from linux kernel list.h:
  * https://github.com/torvalds/linux/raw/master/include/linux/list.h
  *

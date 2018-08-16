@@ -4,6 +4,7 @@
  * @mail: xuguo.wong@gmail.com
  * @date 2018/08/13
  *
+ * authority: GPL v2.0
  *
  * Here is a cache simulator configuration header.
  */
@@ -17,6 +18,16 @@
 #include <stdbool.h>
 
 #include "cache_ops.h"
+
+// The current cpu architecture has 2 type of cache type:
+//		1 ICache, store the instructions
+//		2 DCache, store the data
+typedef enum cache_sys_arch {
+    i386 = 1,
+    x86_64,
+    arm_32,
+    arm_64,
+} cache_sys_arch_t;
 
 // The current cpu architecture has 2 type of cache type:
 //		1 ICache, store the instructions
@@ -105,18 +116,26 @@ typedef enum cache_H_M_category {
 
 typedef struct __attribute__ ((__packed__)) cache_line {
 #ifdef __x86_64__
-	unsigned long long valid: 1;
-	unsigned long long tag: 63;
+    unsigned long long valid: 1;
+    unsigned long long dirty: 1;
+    unsigned long long tag: 62;
+		#define valid_mask 0x8000000000000000
+		#define dirt_mask  0x4000000000000000
+		#define tag_mask   0x3fffffffffffffff
 #else
-	unsigned long valid: 1;
-	unsigned long tag: 31;
+    unsigned long valid: 1;
+    unsigned long dirty: 1;
+    unsigned long tag: 30;
+    #define valid_mask 0x80000000
+    #define dirty_mask 0x40000000
+    #define tag_mask   0x3fffffff
 #endif
-	char *l_data;
+    char *l_data;
 } cache_line_t;
 
 typedef struct __attribute__ ((__packed__)) cache_set {
-	cache_line_t *s_data;
-} cache_set_t ;
+    cache_line_t *s_data;
+} cache_set_t;
 
 typedef struct cache {
     struct list_head list;

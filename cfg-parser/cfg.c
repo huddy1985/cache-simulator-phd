@@ -1,5 +1,12 @@
 /*
- * Copyleft
+ * @file config.h
+ * @author charlies
+ * @mail: xuguo.wong@gmail.com
+ * @date 2018/08/13
+ *
+ * authority: GPL v2.0
+ *
+ * Here is a cache simulator configuration header.
  */
 
 #include <dirent.h>

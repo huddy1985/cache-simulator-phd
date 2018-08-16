@@ -4,6 +4,7 @@
  * @mail: xuguo.wong@gmail.com
  * @date 2018/08/13
  *
+ * authority: GPL v2.0
  *
  * This is the simulator of inclusive cache.
  */

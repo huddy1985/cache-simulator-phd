@@ -1,3 +1,6 @@
+## define hardware arch
+## 1. i386, 2. x86_64, 3. arm
+arch=1
 ## define cache type
 ## ICache or DCache
 type=0
