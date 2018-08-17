@@ -1,1 +1,3 @@
 *.rb linguist-language=C
+example/* linguist-vendored
+
