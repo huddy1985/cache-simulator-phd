@@ -14,8 +14,6 @@
 
 #include "cfg.h"
 
-
-
 // portable GNU error(3)
 void error_exit(int status, int errnum, const char *format, ...)
 {
@@ -31,13 +29,10 @@ void error_exit(int status, int errnum, const char *format, ...)
     return;
 }
 
-
 struct st_insnlist {
     struct st_insnlist *next;
     x86_insn_t *insn;
 };
-
-
 
 // Disassemble the x86 code contained in 'textbuf'.
 // Store the disassembled instructions in a linear array for easy mapping

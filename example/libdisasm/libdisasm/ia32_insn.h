@@ -24,34 +24,34 @@
  * address space in the x86_insn_ts */
 
 #define INVALID_INSN ((size_t) -1)	/* return value for invalid insn */
-#define MAKE_INVALID( i, buf )                          \
-                strcpy( i->mnemonic, "invalid" );       \
-                x86_oplist_free( i );                   \
-                i->size = 1;                            \
-                i->group = insn_none;                   \
-                i->type = insn_invalid;                 \
-                memcpy( i->bytes, buf, 1 );
+#define MAKE_INVALID( i, buf )                  \
+    strcpy( i->mnemonic, "invalid" );           \
+    x86_oplist_free( i );                       \
+    i->size = 1;                                \
+    i->group = insn_none;                       \
+    i->type = insn_invalid;                     \
+    memcpy( i->bytes, buf, 1 );
 
 
 size_t ia32_disasm_addr( unsigned char * buf, size_t buf_len, 
-		x86_insn_t *insn);
+                         x86_insn_t *insn);
 
 
 /* --------------------------------------------------------- Table Lookup */
 /* IA32 Instruction defintion for ia32_opcodes.c */
 typedef struct {
-   unsigned int table;          /* escape to this sub-table */
-   unsigned int mnem_flag;      /* Flags referring to mnemonic */
-   unsigned int notes;          /* Notes for this instruction */
-   unsigned int dest_flag, src_flag, aux_flag; /* and for specific operands */
-   unsigned int cpu;            /* minimumCPU [AND with clocks?? */
-   char mnemonic[16];           /* buffers for building instruction */
-   char mnemonic_att[16];       /* at&t style mnemonic name */
-   int32_t dest;
-   int32_t src;
-   int32_t aux;
-   unsigned int flags_effected;
-   unsigned int implicit_ops;	/* implicit operands */
+    unsigned int table;          /* escape to this sub-table */
+    unsigned int mnem_flag;      /* Flags referring to mnemonic */
+    unsigned int notes;          /* Notes for this instruction */
+    unsigned int dest_flag, src_flag, aux_flag; /* and for specific operands */
+    unsigned int cpu;            /* minimumCPU [AND with clocks?? */
+    char mnemonic[16];           /* buffers for building instruction */
+    char mnemonic_att[16];       /* at&t style mnemonic name */
+    int32_t dest;
+    int32_t src;
+    int32_t aux;
+    unsigned int flags_effected;
+    unsigned int implicit_ops;	/* implicit operands */
 } ia32_insn_t;
 
 
@@ -189,14 +189,14 @@ typedef struct {
  * and after lookup. Some tables re-use the current byte, others
  * consume a byte only if the ModR/M encodes no operands, etc */
 enum ia32_tbl_type_id {
-	tbl_opcode = 0,	/* standard opcode table: no surprises */
-	tbl_prefix,	/* Prefix Override, e.g. 66/F2/F3 */
-	tbl_suffix,	/* 3D Now style */
-	tbl_extension,	/* ModR/M extension: 00-FF -> 00-07 */
-	tbl_ext_ext,	/* extension of modr/m using R/M field */
-	tbl_fpu,	/* fpu table: 00-BF -> 00-0F */
-	tbl_fpu_ext	/* fpu extension : C0-FF -> 00-1F */
- };
+    tbl_opcode = 0,	/* standard opcode table: no surprises */
+    tbl_prefix,	/* Prefix Override, e.g. 66/F2/F3 */
+    tbl_suffix,	/* 3D Now style */
+    tbl_extension,	/* ModR/M extension: 00-FF -> 00-07 */
+    tbl_ext_ext,	/* extension of modr/m using R/M field */
+    tbl_fpu,	/* fpu table: 00-BF -> 00-0F */
+    tbl_fpu_ext	/* fpu extension : C0-FF -> 00-1F */
+};
 
 /* How it works:
  * Bytes are 'consumed' if the next table lookup requires that the byte
@@ -221,11 +221,11 @@ enum ia32_tbl_type_id {
 /* Convenience struct for opcode tables : these will be stored in a 
  * 'table of tables' so we can use a table index instead of a pointer */
 typedef struct {		/* Assembly instruction tables */
-   ia32_insn_t *table;		/* Pointer to table of instruction encodings */
-   enum ia32_tbl_type_id type;
-   unsigned char shift;		/* amount to shift modrm byte */
-   unsigned char mask;		/* bit mask for look up */
-   unsigned char minlim,maxlim;	/* limits on min/max entries. */
+    ia32_insn_t *table;		/* Pointer to table of instruction encodings */
+    enum ia32_tbl_type_id type;
+    unsigned char shift;		/* amount to shift modrm byte */
+    unsigned char mask;		/* bit mask for look up */
+    unsigned char minlim,maxlim;	/* limits on min/max entries. */
 } ia32_table_desc_t;
 
 
@@ -404,7 +404,7 @@ typedef struct {		/* Assembly instruction tables */
 #define INS_OUT		(INS_SYSTEM | 0x03)	/* output to port */
 #define INS_CPUID	(INS_SYSTEM | 0x04)	/* identify cpu */
 
-/* INS_OTHER */
+  /* INS_OTHER */
 #define INS_NOP		(INS_OTHER | 0x01)
 #define INS_BCDCONV	(INS_OTHER | 0x02)	/* convert to/from BCD */
 #define INS_SZCONV	(INS_OTHER | 0x03)	/* convert size of operand */
@@ -415,7 +415,7 @@ typedef struct {		/* Assembly instruction tables */
 #define INS_TYPE_MASK	0xFFFF
 #define INS_TYPE( type )      ( type & INS_TYPE_MASK )
 
-   /* flags effected by instruction */
+/* flags effected by instruction */
 #define INS_TEST_CARRY        0x01    /* carry */
 #define INS_TEST_ZERO         0x02    /* zero/equal */
 #define INS_TEST_OFLOW        0x04    /* overflow */
@@ -434,9 +434,9 @@ typedef struct {		/* Assembly instruction tables */
 /* SF != OF */
 #define INS_TEST_SFNEOF       0x8000
 
-#define INS_TEST_ALL		INS_TEST_CARRY | INS_TEST_ZERO | \
-				INS_TEST_OFLOW | INS_TEST_SIGN | \
-				INS_TEST_PARITY
+#define INS_TEST_ALL		INS_TEST_CARRY | INS_TEST_ZERO |  \
+    INS_TEST_OFLOW | INS_TEST_SIGN |                      \
+    INS_TEST_PARITY
 
 #define INS_SET_CARRY        0x010000    /* carry */
 #define INS_SET_ZERO         0x020000    /* zero/equal */
@@ -453,9 +453,9 @@ typedef struct {		/* Assembly instruction tables */
 #define INS_SET_SFEQOF       0x40000000
 #define INS_SET_SFNEOF       0x80000000
 
-#define INS_SET_ALL		INS_SET_CARRY | INS_SET_ZERO | \
-				INS_SET_OFLOW | INS_SET_SIGN | \
-				INS_SET_PARITY
+#define INS_SET_ALL		INS_SET_CARRY | INS_SET_ZERO |  \
+    INS_SET_OFLOW | INS_SET_SIGN |                    \
+    INS_SET_PARITY
 
 #define INS_TEST_MASK          0x0000FFFF
 #define INS_FLAGS_TEST(x)      (x & INS_TEST_MASK)
@@ -479,24 +479,24 @@ typedef struct {		/* Assembly instruction tables */
 #define X86_EXEC_UNITS
 
 typedef struct {	/* representation of an insn during decoding */
-	uint32_t flags;		/* runtime settings */
-	/* instruction prefixes and other foolishness */
-	uint32_t prefix;		/* encoding of prefix */
-	char prefix_str[16];		/* mnemonics for prefix */
-	uint32_t branch_hint;	/* gah! */
-	unsigned int cpu_ver;		/* TODO: cpu version */
-	unsigned int clocks;		/* TODO: clock cycles: min/max */
-	unsigned char last_prefix;
-	/* runtime intruction decoding helpers */
-	unsigned char mode;		/* 16, 32, 64 */
-	unsigned char gen_regs;		/* offset of default general reg set */
-	unsigned char sz_operand;	/* operand size for insn */
-	unsigned char sz_address;	/* address size for insn */
-	unsigned char uops;		/* uops per insn */
-	unsigned char pairing;		/* np,pu,pv.lv */
-	unsigned char exec_unit;
-	unsigned char exec_port;
-	unsigned char latency;
+    uint32_t flags;		/* runtime settings */
+    /* instruction prefixes and other foolishness */
+    uint32_t prefix;		/* encoding of prefix */
+    char prefix_str[16];		/* mnemonics for prefix */
+    uint32_t branch_hint;	/* gah! */
+    unsigned int cpu_ver;		/* TODO: cpu version */
+    unsigned int clocks;		/* TODO: clock cycles: min/max */
+    unsigned char last_prefix;
+    /* runtime intruction decoding helpers */
+    unsigned char mode;		/* 16, 32, 64 */
+    unsigned char gen_regs;		/* offset of default general reg set */
+    unsigned char sz_operand;	/* operand size for insn */
+    unsigned char sz_address;	/* address size for insn */
+    unsigned char uops;		/* uops per insn */
+    unsigned char pairing;		/* np,pu,pv.lv */
+    unsigned char exec_unit;
+    unsigned char exec_port;
+    unsigned char latency;
 } ia32_info_t;
 #define MODE_32 0	/* default */
 #define MODE_16 1
