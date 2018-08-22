@@ -37,7 +37,9 @@ struct st_insnlist {
 // Disassemble the x86 code contained in 'textbuf'.
 // Store the disassembled instructions in a linear array for easy mapping
 // of line number to address/offset/instruction
-int disassemble_text(unsigned char *textbuf, size_t text_len, uint32_t textaddr, x86_insn_t ***instlist_ptr, int *inst_len)
+int disassemble_text(unsigned char *textbuf, size_t text_len, 
+						uint32_t textaddr, x86_insn_t ***instlist_ptr, 
+						int *inst_len)
 {
     struct st_insnlist *insnll_head, **insnll_prev_ptr, *insnll_next, *insnll;
     int decode_size, total_read, n_insn, inst_idx;
@@ -54,8 +56,10 @@ int disassemble_text(unsigned char *textbuf, size_t text_len, uint32_t textaddr,
         insnll->insn = malloc(sizeof(x86_insn_t));
         insnll->next = NULL;
         n_insn++;
-        decode_size = x86_disasm(textbuf, text_len, textaddr, total_read, insnll->insn);
-        if (decode_size == 0 || (decode_size != 0 && insnll->insn->type == insn_invalid))
+        decode_size = x86_disasm(textbuf, text_len, textaddr, 
+									total_read, insnll->insn);
+        if (decode_size == 0 || (decode_size != 0 
+			&& insnll->insn->type == insn_invalid))
             error_exit(-1, 0, "Invalid instruction\n");
         total_read += decode_size;
     }

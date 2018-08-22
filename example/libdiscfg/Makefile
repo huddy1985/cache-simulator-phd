@@ -1,5 +1,5 @@
 all:
-	gcc -Wall -g test_cfg.c cfg.c -o test_cfg -ldisasm -lbfd
+	gcc -Wall -g test_cfg.c cfg.c -o test_cfg -ldisasm -lbfd -I./
 	gcc -Wall -g sample.c -o sample
 
 test:
