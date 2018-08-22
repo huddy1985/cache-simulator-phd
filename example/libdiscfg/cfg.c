@@ -133,7 +133,9 @@ static struct st_branch * get_branch_targets(x86_insn_t *inst)
 // instructions.
 // Return a list of all basic blocks in the CFG, as well as a list
 // containing the top-level nodes (ie nodes with no other parent blocks).
-void cfg_make(x86_insn_t **insts, int insts_len, struct cfg_node_list **nodelist_ret, struct cfg_node_list **top_nodes_ret)
+void cfg_make(x86_insn_t **insts, int insts_len, 
+				struct cfg_node_list **nodelist_ret, 
+				struct cfg_node_list **top_nodes_ret)
 {
     int inst_idx, inst_target_idx, end_block, byte_idx, inst_byte_idx, 
         target_offset, text_len, *map_offset_to_idx;
@@ -384,7 +386,8 @@ void cfg_fprint_graphviz(FILE *outfile, struct cfg_node_list *node_list)
 // Output the complete CFG node list as a graphviz graph.
 // Render with: dot -Tps output.dot -o output.ps
 // Label the graph nodes with the disassembled instructions.
-void cfg_fprint_graphviz_insts(FILE *outfile, struct cfg_node_list *node_list, x86_insn_t **insts, int insts_len)
+void cfg_fprint_graphviz_insts(FILE *outfile, struct cfg_node_list *node_list,
+								 x86_insn_t **insts, int insts_len)
 {
     struct cfg_node_list *nl, *nll;
     struct cfg_node *cfgnode;
@@ -398,12 +401,19 @@ void cfg_fprint_graphviz_insts(FILE *outfile, struct cfg_node_list *node_list, x
         cfgnode = nl->node;
         fprintf(outfile, "    n%i_%i [ shape = \"box\"\n"
                          "             fontname = \"Monospace\"\n"
-                         "             label = \"", cfgnode->start_inst, cfgnode->start_inst + cfgnode->block_len - 1);
-        for(inst_idx = cfgnode->start_inst; inst_idx < cfgnode->start_inst + cfgnode->block_len; inst_idx++) {
+                         "             label = \"",
+						cfgnode->start_inst, 
+						cfgnode->start_inst + cfgnode->block_len - 1);
+        for(inst_idx = cfgnode->start_inst; 
+			inst_idx < cfgnode->start_inst + cfgnode->block_len; 
+			inst_idx++) {
             x86_format_insn (insts[inst_idx], disbuf, 1023, att_syntax);
             while ((tabchr = strchr(disbuf, '\t')) != NULL)
                 *tabchr = ' ';      // remove tab chars, graphviz doesn't like them
-            fprintf(outfile, "%6i : %08x [%2i] %s\\l", inst_idx, insts[inst_idx]->addr, insts[inst_idx]->size, disbuf);
+            fprintf(outfile, "%6i : %08x [%2i] %s\\l", 
+										inst_idx, 
+										insts[inst_idx]->addr, 
+										insts[inst_idx]->size, disbuf);
         }
         fprintf(outfile, "\" ];\n");
         for (nll = cfgnode->children; nll != NULL; nll = nll->next) {
