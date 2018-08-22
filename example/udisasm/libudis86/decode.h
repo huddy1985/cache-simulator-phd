@@ -152,8 +152,8 @@ Mx_reg_size(enum ud_operand_size size)
  */
 struct ud_itab_entry_operand 
 {
-  enum ud_operand_code type;
-  enum ud_operand_size size;
+    enum ud_operand_code type;
+    enum ud_operand_size size;
 };
 
 
@@ -162,11 +162,11 @@ struct ud_itab_entry_operand
  */
 struct ud_itab_entry 
 {
-  enum ud_mnemonic_code         mnemonic;
-  struct ud_itab_entry_operand  operand1;
-  struct ud_itab_entry_operand  operand2;
-  struct ud_itab_entry_operand  operand3;
-  uint32_t                      prefix;
+    enum ud_mnemonic_code         mnemonic;
+    struct ud_itab_entry_operand  operand1;
+    struct ud_itab_entry_operand  operand2;
+    struct ud_itab_entry_operand  operand3;
+    uint32_t                      prefix;
 };
 
 struct ud_lookup_table_list_entry {
@@ -180,7 +180,7 @@ struct ud_lookup_table_list_entry {
 static inline int
 ud_opcode_field_sext(uint8_t primary_opcode)
 {
-  return (primary_opcode & 0x02) != 0;
+    return (primary_opcode & 0x02) != 0;
 }
 
 extern struct ud_itab_entry ud_itab[];

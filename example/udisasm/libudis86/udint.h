@@ -38,31 +38,31 @@
 #endif /* !HAVE_ASSERT_H */
 
 #if defined(UD_DEBUG)
-  #define UDERR(u, msg) \
-    do { \
-      (u)->error = 1; \
-      fprintf(stderr, "decode-error: %s:%d: %s", \
-              __FILE__, __LINE__, (msg)); \
+#define UDERR(u, msg)                               \
+    do {                                            \
+        (u)->error = 1;                             \
+        fprintf(stderr, "decode-error: %s:%d: %s",  \
+                __FILE__, __LINE__, (msg));         \
     } while (0)
 #else
-  #define UDERR(u, m) \
-    do { \
-      (u)->error = 1; \
+#define UDERR(u, m)                             \
+    do {                                        \
+        (u)->error = 1;                         \
     } while (0)
 #endif /* !LOGERR */
 
-#define UD_RETURN_ON_ERROR(u) \
-  do { \
-    if ((u)->error != 0) { \
-      return (u)->error; \
-    } \
-  } while (0)
+#define UD_RETURN_ON_ERROR(u)                   \
+    do {                                        \
+        if ((u)->error != 0) {                  \
+            return (u)->error;                  \
+        }                                       \
+    } while (0)
 
-#define UD_RETURN_WITH_ERROR(u, m) \
-  do { \
-    UDERR(u, m); \
-    return (u)->error; \
-  } while (0)
+#define UD_RETURN_WITH_ERROR(u, m)              \
+    do {                                        \
+        UDERR(u, m);                            \
+        return (u)->error;                      \
+    } while (0)
 
 #ifndef __UD_STANDALONE__
 # define UD_NON_STANDALONE(x) x

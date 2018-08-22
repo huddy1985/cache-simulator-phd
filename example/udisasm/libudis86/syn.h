@@ -49,5 +49,5 @@ void ud_syn_print_mem_disp(struct ud* u, const struct ud_operand *, int sign);
 #endif /* UD_SYN_H */
 
 /*
-vim: set ts=2 sw=2 expandtab
+  vim: set ts=2 sw=2 expandtab
 */
