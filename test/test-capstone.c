@@ -52,10 +52,12 @@ static void print_insn_detail(csh ud, cs_mode mode, cs_insn *ins, csh handle)
         return;
 
     x86 = &(ins->detail->x86);
-
-    print_string_hex("\tPrefix:", x86->prefix, 4);
-
-    print_string_hex("\tOpcode:", x86->opcode, 4);
+	
+	if (strlen(x86->prefix))
+    	print_string_hex("\tPrefix:", x86->prefix, strlen(x86->prefix));
+	
+	if (strlen(x86->opcode))
+    	print_string_hex("\tOpcode:", x86->opcode, strlen(x86->opcode));
 
     printf("\trex: 0x%x\n", x86->rex);
 

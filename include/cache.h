@@ -115,13 +115,17 @@ typedef enum cache_H_M_category {
 } cache_H_M_category_t;
 
 typedef struct __attribute__ ((__packed__)) cache_line {
+    char *l_data;
+} cache_line_t;
+
+typedef struct __attribute__ ((__packed__)) cache_set {
 #ifdef __x86_64__
     unsigned long long valid: 1;
     unsigned long long dirty: 1;
     unsigned long long tag: 62;
-		#define valid_mask 0x8000000000000000
-		#define dirt_mask  0x4000000000000000
-		#define tag_mask   0x3fffffffffffffff
+	#define valid_mask 0x8000000000000000
+	#define dirt_mask  0x4000000000000000
+	#define tag_mask   0x3fffffffffffffff
 #else
     unsigned long valid: 1;
     unsigned long dirty: 1;
@@ -130,10 +134,7 @@ typedef struct __attribute__ ((__packed__)) cache_line {
     #define dirty_mask 0x40000000
     #define tag_mask   0x3fffffff
 #endif
-    char *l_data;
-} cache_line_t;
-
-typedef struct __attribute__ ((__packed__)) cache_set {
+    cache_set_ways_t sw_cache;
     cache_line_t *s_data;
 } cache_set_t;
 
@@ -144,7 +145,6 @@ typedef struct cache {
     cache_hierarchy_policy_t hp_cache;
     cache_conservative_policy_t cp_cache;
     cache_set_associative_t sa_cache;
-    cache_set_ways_t sw_cache;
     void *ops;
     unsigned long long statistical_hit;
     unsigned long long statistical_miss;

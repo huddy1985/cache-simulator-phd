@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <platform.h>
 #include <capstone.h>
@@ -41,10 +42,11 @@ static void print_insn_detail(csh ud, cs_mode mode, cs_insn *ins)
 		return;
 
 	x86 = &(ins->detail->x86);
-
-	print_string_hex("\tPrefix:", x86->prefix, 4);
-
-	print_string_hex("\tOpcode:", x86->opcode, 4);
+	if (strlen(x86->prefix))
+		print_string_hex("\tPrefix:", x86->prefix, 4);
+	
+	if (strlen(x86->opcode))
+		print_string_hex("\tOpcode:", x86->opcode, strlen(x86->opcode));
 
 	printf("\trex: 0x%x\n", x86->rex);
 
