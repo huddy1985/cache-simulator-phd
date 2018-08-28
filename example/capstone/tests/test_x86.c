@@ -48,6 +48,7 @@ static void print_insn_detail(csh ud, cs_mode mode, cs_insn *ins)
 	if (strlen(x86->opcode))
 		print_string_hex("\tOpcode:", x86->opcode, strlen(x86->opcode));
 
+	printf("op str: %x\n", ins->bytes);
 	printf("\trex: 0x%x\n", x86->rex);
 
 	printf("\taddr_size: %u\n", x86->addr_size);
@@ -226,6 +227,11 @@ static void test()
 
 			for (j = 0; j < count; j++) {
 				printf("0x%" PRIx64 ":\t%s\t%s\n", insn[j].address, insn[j].mnemonic, insn[j].op_str);
+				int k = 0;
+				printf("insn:\t");
+				for (k; k < insn[j].size; ++k)
+					printf("0x%x ", insn[j].bytes[k]);
+				printf("\n\n");	
 				print_insn_detail(handle, platforms[i].mode, &insn[j]);
 			}
 			printf("0x%" PRIx64 ":\n", insn[j-1].address + insn[j-1].size);

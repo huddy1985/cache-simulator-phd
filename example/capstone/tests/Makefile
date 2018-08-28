@@ -25,7 +25,7 @@ CC = $(CROSS)gcc
 endif
 
 
-CFLAGS += -Wall -I$(INCDIR)
+CFLAGS += -Wall -I$(INCDIR) -g
 LDFLAGS += -L$(LIBDIR)
 
 CFLAGS += $(foreach arch,$(LIBARCHS),-arch $(arch))
